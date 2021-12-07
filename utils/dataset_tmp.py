@@ -676,10 +676,10 @@ def load_image(self, i):
             path_ir = self.ir_files[i]
             im_bgr = cv2.imread(path_bgr)  # BGR
             im_ir = cv2.imread(path_ir) # IR
-            c1,c2,c3 = cv2.split(im_bgr)
+            c1,c2,c3 = split(img_bgr)
             c4 = cv2.cvtColor(im_ir, cv2.COLOR_BGR2GRAY) # converting image to greyscale, with single channgel
-            im = cv2.merge((c1,c2,c3,c4)) # Merging an image with 4 channels
-            assert im_bgr is not None and im_ir is not None, 'Image Not Found ' + path
+            im = merge(c1,c2,c3,c4) # Merging an image with 4 channels
+            assert None not in (c1,c2,c3,c4), 'Image Not Found ' + path
         h0, w0 = im.shape[:2]  # orig hw
         r = self.img_size / max(h0, w0)  # ratio
         if r != 1:  # if sizes are not equal
