@@ -1,0 +1,12 @@
+train: ../all_images/combined/autosplit_train.txt 
+val:   ../all_images/combined/autosplit_val.txt
+test:  ../all_images/combined/autosplit_test.txt
+
+# number of classes
+nc: 1
+
+# number of channels
+ch: 3
+
+# class names
+names: ["sheep"]

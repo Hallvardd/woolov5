@@ -1,0 +1,12 @@
+train: ../dataset/pruned_patches/images/train/ 
+val:   ../dataset/pruned_patches/images/val/
+test:  ../dataset/pruned_patches/images/test/
+
+# number of classes
+nc: 4
+
+# number of channels
+ch: 3
+
+# class names
+names: ["black","brown", "grey", "white"]

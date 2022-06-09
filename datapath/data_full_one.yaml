@@ -1,0 +1,12 @@
+train: ../dataset/full/images/train/ 
+val:   ../dataset/full/images/val/
+test:  ../dataset/full/images/test/
+
+# number of classes
+nc: 1
+
+# number of channels
+ch: 4
+
+# class names
+names: ["sheep"]

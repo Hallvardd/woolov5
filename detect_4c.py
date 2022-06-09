@@ -94,7 +94,7 @@ def run(weights=ROOT / 'yolov5s.pt',  # model.pt path(s)
         bs = len(dataset)  # batch_size
     else:
         dataset = LoadImages(source, img_size=imgsz, stride=stride, auto=pt)
-        #train_loader, dataset = create_dataloader(train_path, imgsz, 1, gs, single_cls, hyp=hyp, augment=False, shuffle=False)
+        #train_loader, dataset = create_dataloader(source, imgsz, 1, gs, single_cls, hyp=hyp, augment=False, shuffle=False)
         bs = 1  # batch_size
     vid_path, vid_writer = [None] * bs, [None] * bs
 

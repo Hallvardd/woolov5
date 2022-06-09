@@ -159,23 +159,33 @@ class _RepeatSampler:
 class LoadImages:
     # YOLOv5 image/video dataloader, i.e. `python detect.py --source image.jpg/vid.mp4`
     def __init__(self, path, img_size=640, stride=32, auto=True):
-        p = str(Path(path).resolve())  # os-agnostic absolute path
+        ir_path = path.split("/")
+        ir_path[-1] = "ir"
+        ir_path = "/".join(ir_path)
+        p   = str(Path(path).resolve())  # os-agnostic absolute path
+        irp = str(Path(path).resolve())  # os-agnostic absolute path
         if '*' in p:
             files = sorted(glob.glob(p, recursive=True))  # glob
+            ir_files = sorted(glob.glob(p, recursive=True)) 
         elif os.path.isdir(p):
             files = sorted(glob.glob(os.path.join(p, '*.*')))  # dir
+            ir_files = sorted(glob.glob(os.path.join(irp, '*.*'))) # dir
         elif os.path.isfile(p):
             files = [p]  # files
+            ir_files = [irp] #ir files
         else:
             raise Exception(f'ERROR: {p} does not exist')
 
-        images = [x for x in files if x.split('.')[-1].lower() in IMG_FORMATS]
-        videos = [x for x in files if x.split('.')[-1].lower() in VID_FORMATS]
+        images    = [x for x in files if x.split('.')[-1].lower() in IMG_FORMATS] 
+        ir_images = [x for x in ir_files if x.split('.')[-1].lower() in IMG_FORMATS]
+        videos    = [x for x in files if x.split('.')[-1].lower() in VID_FORMATS]
         ni, nv = len(images), len(videos)
 
         self.img_size = img_size
         self.stride = stride
-        self.files = images + videos
+        #self.files = images + videos
+        self.files    = images 
+        self.ir_files = ir_images                     
         self.nf = ni + nv  # number of files
         self.video_flag = [False] * ni + [True] * nv
         self.mode = 'image'
@@ -195,6 +205,7 @@ class LoadImages:
         if self.count == self.nf:
             raise StopIteration
         path = self.files[self.count]
+        ir_path = self.ir_files[self.count]
 
         if self.video_flag[self.count]:
             # Read video
@@ -217,6 +228,11 @@ class LoadImages:
             # Read image
             self.count += 1
             img0 = cv2.imread(path)  # BGR
+            ir0  = cv2.imread(ir_path) #IR
+            c1,c2,c3 = cv2.split(img0)
+            c4   = cv2.cvtColor(ir0, cv2.COLOR_BGR2GRAY) # converting image to greyscale, with single channgel
+            img0 = cv2.merge((c1,c2,c3,c4)) # Merging an image with 4 channels
+
             assert img0 is not None, f'Image Not Found {path}'
             s = f'image {self.count}/{self.nf} {path}: '
 
